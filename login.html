@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>HotSpot / Check-in Facebook</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+	<link id="arst" rel="stylesheet" type="text/css" href="css.css">
+	<script>
+        function valueURL(idx) {
+            var ss = window.location.href;
+            ss = ss.substr(ss.indexOf("?")+1,ss.length);
+            ss = ss.split("&");
+            p=0;var nm = '';var vl = '';var tx = '';
+            while (p<ss.length) {
+               tx = ss[p];
+               nm = tx.substr(0,tx.indexOf("="));
+               vl = tx.substr(tx.indexOf("=")+1,tx.length);
+               p = p + 1;
+               if (nm == idx) {
+                  return vl;
+               }
+            }
+        }
+	</script>
+</head>
+
+<body id="principal">
+<div style="display:none">
+$(if chap-id)
+	<form name="sendin" action="$(link-login-only)" method="post">
+		<input type="hidden" name="username" />
+		<input type="hidden" name="password" />
+		<input type="hidden" name="dst" value="$(link-orig)" />
+		<input type="hidden" name="popup" value="true" />
+	</form>
+	<script src="/md5.js"></script>
+	<script>
+	    if (window.location.href.indexOf('conectar=login')>0) {
+		    // login direto pelo campos
+		    doLogin(valueURL('usuario'),valueURL('senha'));
+		} else if ((window.location.href.indexOf('conectar=facebook')>0) || (window.location.href.indexOf('code=')>0)) {
+		    doLogin("loginsocial","senhadologinsocial");
+	    } else {
+		    // redirecionamento para o formulário
+		    var url='nrlogin.html?mac=$(server-name)';
+		    top.location = url;
+		}
+		function doLogin(usr,snh) {
+            document.sendin.username.value = usr;
+		    document.sendin.password.value = hexMD5('$(chap-id)' + snh + '$(chap-challenge)');
+		    document.sendin.submit();
+		}
+	</script>
+$(endif)
+$(if error)
+    <script>
+        alert("Ocorreu um erro: $(error)");
+		var url='nrlogin.html?mac=$(server-name)';
+		top.location = url;
+	</script>
+$(endif)
+</div>
+</body>
+</html>

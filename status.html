@@ -1,0 +1,128 @@
+<html>
+<title>Status</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="expires" content="-1" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+
+<link rel="stylesheet" type="text/css" href="css/app.css">
+<link rel="stylesheet" type="text/css" href="css/materialize.min.css">
+<head>
+$(if refresh-timeout)
+<meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+$(endif)
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<style type="text/css">
+<!--
+textarea,input,select {
+	background-color: #FDFBFB;
+	border: 1px #BBBBBB solid;
+	padding: 2px;
+	margin: 1px;
+	font-size: 14px;
+	color: #808080;
+}
+
+.tabula{
+ 
+border-width: 1px; 
+border-collapse: collapse; 
+border-color: #c1c1c1; 
+background-color: transparent;
+font-family: verdana;
+font-size: 11px;
+}
+
+body{ color: #737373; font-size: 12px; font-family: verdana; }
+
+a, a:link, a:visited, a:active { color: #AAAAAA; text-decoration: none; font-size: 12px; }
+a:hover { border-bottom: 1px dotted #c1c1c1; color: #AAAAAA; }
+img {border: none;}
+td { font-size: 12px; padding: 4px;}
+
+-->
+</style>
+<script language="JavaScript">
+<!--
+$(if advert-pending == 'yes')
+    var popup = '';
+    function focusAdvert() {
+	if (window.focus) popup.focus();
+    }
+    function openAdvert() {
+	popup = open('$(link-advert)', 'hotspot_advert', '');
+	setTimeout("focusAdvert()", 1000);
+    }
+$(endif)
+    function openLogout() {
+	if (window.name != 'hotspot_status') return true;
+        open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+	window.close();
+	return false;
+    }
+//-->
+</script>
+<div id="fb-root"></div>
+</head>
+
+<body bottommargin="0" topmargin="0" leftmargin="0" rightmargin="0"
+$(if advert-pending == 'yes')
+	onLoad="openAdvert()"
+$(endif)
+>
+
+<table width="100%" height="100%">
+
+<tr>
+<td align="center" valign="middle">
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v2.10&appId=484800185214651";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+<div class="fb-like" data-href="https://www.facebook.com/1628655914093771/" data-layout="button" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+<form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
+<table border="1" class="tabula">
+$(if login-by == 'trial')
+	<br><div style="text-align: center;">Bem Vindo</div><br>
+$(elif login-by != 'mac')
+	<br><div style="text-align: center;">Bem Vindo </div><br>
+$(endif)
+	<tr><td align="right">End. IP:</td><td>$(ip)</td></tr>
+	<tr><td align="right">bytes up/down:</td><td>$(bytes-in-nice) / $(bytes-out-nice)</td></tr>
+$(if session-time-left)
+	<tr><td align="right">conectado / restante:</td><td>$(uptime) / $(session-time-left)</td></tr>
+$(else)
+	<tr><td align="right">conectado:</td><td>$(uptime)</td></tr>
+$(endif)
+$(if blocked == 'yes')
+	<tr><td align="right">status:</td><td><div style="color: #FF8080">
+<a href="$(link-advert)" target="hotspot_advert">advertisement</a> required</div></td>
+$(elif refresh-timeout)
+	<tr><td align="right">status refresh:</td><td>$(refresh-timeout)</td>
+$(endif)
+
+</table>
+$(if login-by-mac != 'yes')
+<br>
+<!-- user manager link. if user manager resides on other router, replace $(hostname) by its address
+<button onclick="document.location='http://$(hostname)/user?subs='; return false;">status</button>
+<!-- end of user manager link -->
+<input type="submit" value="Desconectar">
+$(endif)
+</form>
+
+</td>
+</table>
+<script src="js/jquery.min.js"></script>	
+<script src="js/materialize.min.js"></script>	
+</body>
+
+</html>
